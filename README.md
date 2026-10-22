@@ -1,41 +1,33 @@
-# Infinite Storyteller Streamlit App
+# Infinite Storyteller
 
-An interactive, AI-powered storytelling application built with Python and Streamlit. The application allows users to create accounts, sign in, generate custom stories based on prompts, select styles/genres, listen to stories read aloud, continue chapters dynamically, and download stories as PDF or TXT files.
+A Streamlit web app that writes stories with an LLM. You pick a genre and style, give it a prompt, and it writes
+the story. You can keep adding chapters that stay consistent with the plot, listen to it read aloud, and download
+it as a PDF or text file.
+
+Demo video: [media/demo.mp4](media/demo.mp4)
 
 ## Features
-- **User Authentication**: Secure signup and login flow powered by an SQLite database and SHA-256 password hashing.
-- **AI Story Generation**: Custom story outline and content generation powered by OpenAI's `gpt-4o-mini` model.
-- **Story Continuity**: Ability to append chapters to existing stories while maintaining plot and tone consistency.
-- **Read Aloud (Text-to-Speech)**: Uses `pyttsx3` to generate vocal audio readouts of story chapters with selectable voice engines.
-- **Export Options**: Prepare and download generated stories as formatted PDFs (via ReportLab) or standard TXT files.
-- **Interactive History**: Tracks and lists the user's recent story generation prompts for easy retrieval.
-- **Aesthetic UI**: Custom CSS and dark theme with blur overlays and background image bindings.
 
-## Tech Stack
-- **Streamlit** (Frontend Web Interface)
-- **OpenAI Python SDK** (AI generation API)
-- **SQLite3** (Local relational database)
-- **pyttsx3** (Offline cross-platform text-to-speech)
-- **ReportLab** (Dynamic PDF creation)
-- **Python-dotenv** (Environment variable management)
+- Sign-up and login backed by SQLite, with each user's prompt history saved
+- Story and chapter generation with OpenAI `gpt-4o-mini`; new chapters are given the earlier text so the plot and
+  tone carry over
+- Text-to-speech playback with `pyttsx3` (works offline)
+- Export to PDF (ReportLab) or TXT
+- Custom dark theme with CSS
 
-## Setup Instructions
+## Run it
 
-1. Clone or navigate to this folder.
-2. Create a virtual environment and install the required dependencies:
-   ```bash
-   python -m venv .venv
-   .venv\Scripts\activate
-   pip install -r requirements.txt
-   ```
-3. Set up your API key in a `.env` file (see `.env.example`):
-   ```env
-   OPENAI_API_KEY=your-actual-api-key-here
-   ```
-4. Run the Streamlit application:
-   ```bash
-   streamlit run app.py
-   ```
+```bash
+python -m venv .venv
+.venv\Scripts\activate          # Windows
+pip install -r requirements.txt
+copy .env.example .env          # then put your OPENAI_API_KEY in .env
+streamlit run app.py
+```
 
-## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Tests: `pytest test_app.py`
+
+## What I'd improve
+
+Passwords are hashed with plain SHA-256. A real deployment should use a salted, slow hash such as bcrypt or argon2.
+Story generation also blocks the UI, and streaming the response would make it feel much faster.
